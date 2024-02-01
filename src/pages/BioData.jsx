@@ -2,8 +2,10 @@ import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
-
+import { useDispatch } from "react-redux";
+import { addBioData } from "../redux/student/studentSlice";
 const BioData = () => {
+  const dispatch = useDispatch();
   const initialValues = {
     addmission_number: "",
     student_name: "",
@@ -74,15 +76,16 @@ const BioData = () => {
     initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      try {
-        const response = await axios.post(
-          "http://localhost:3000/api/v1/students/info",
-          values
-        );
-        console.log(response.data);
-      } catch (error) {
-        console.error("Error submitting form:", error);
-      }
+      dispatch(addBioData(values));
+      // try {
+      //   const response = await axios.post(
+      //     "http://localhost:3000/api/v1/students/info",
+      //     values
+      //   );
+      //   console.log(response.data);
+      // } catch (error) {
+      //   console.error("Error submitting form:", error);
+      // }
     },
   });
 
@@ -107,7 +110,7 @@ const BioData = () => {
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                       htmlFor="addmission_number"
                     >
-                      BioData Number
+                      Addmission Number
                     </label>
                     <input
                       id="addmission_number"
@@ -286,15 +289,13 @@ const BioData = () => {
                       <option value="M">Male</option>
                       <option value="O">Others</option>
                     </select>
-                 
                   </div>
                   {formik.touched.gender && formik.errors.gender && (
-                      <p className="text-red-500 text-xs mt-1">
-                        {formik.errors.gender}
-                      </p>
-                    )}
+                    <p className="text-red-500 text-xs mt-1">
+                      {formik.errors.gender}
+                    </p>
+                  )}
                 </div>
-                
               </div>
 
               <hr className="mt-6 border-b-1 border-blueGray-300" />
