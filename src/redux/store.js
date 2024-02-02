@@ -10,7 +10,7 @@ const persistConfig = {
   key: 'root',
   storage,
   version: 1,
-  // blacklisted: ['studentData' ]
+  blacklisted: ['studentData' ]
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

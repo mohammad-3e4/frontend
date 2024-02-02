@@ -15,8 +15,9 @@ const studentSlice = createSlice({
        state.bioData = action.payload
     },
     addSubjectInfo: (state, action) => {
-       state.subjects = action.payload
-    }
+      const { subject, data } = action.payload;
+      state.subjects[subject] = data;
+    },
   },
 });
 
