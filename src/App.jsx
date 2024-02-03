@@ -12,6 +12,7 @@ import BioData from './pages/BioData';
 import Loader from './components/Loader'
 import Co_Schoolastic from './pages/Co_Schoolastic';
 import CreateClass from './pages/CreateClass';
+import CreateTeacher from './pages/CreateTeacher';
 export default function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ export default function App() {
           <Route path='/biodata' element={<BioData />} />
           <Route path='/co-schoolastic' element={<Co_Schoolastic />} />
           <Route path='/create-class' element={<CreateClass />} />
+          <Route path='/create-teacher' element={<CreateTeacher />} />
           <Route path='/' element={<TacherSignIn />} />
           <Route element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />

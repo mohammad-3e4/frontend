@@ -139,7 +139,6 @@ export default function CreateClass() {
 
               <hr className="mt-6 border-b-1 border-blueGray-300" />
 
-              <hr className="mt-6 border-b-1 border-blueGray-300" />
 
               <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                 About Me
