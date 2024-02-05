@@ -7,10 +7,10 @@ import { addBioData } from "../redux/student/studentSlice";
 const BioData = () => {
   const dispatch = useDispatch();
   const initialValues = {
-    addmission_number: "",
+    admission_number: "",
     student_name: "",
-    dateOfBirth: "",
-    guardian_name: "",
+    date_of_birth: "",
+    gurdian_name: "",
     mother_name: "",
     phone: "",
     gender: "",
@@ -18,32 +18,32 @@ const BioData = () => {
     city: "",
     country: "",
     zip_code: "",
-    attended1: "",
-    max_meetings1: "",
-    attended2: "",
-    max_meetings2: "",
+    attendance_term_1: "",
+    max_meeting_term_1: "",
+    attendance_term_2: "",
+    max_meeting_term_2: "",
     weight: "",
     height: "",
-    l_vision: "",
-    r_vision: "",
+    vision_l: "",
+    vision_r: "",
     admin_category: "",
-    reserve_category: "",
+    reservation_category: "",
     sgc: "",
     bpl: "",
-    abled: "",
+    diffrently_abled: "",
     teacher_ward: "",
     religion: "",
     quota: "",
-    addmission_date: "",
+    date_of_admission: "",
     tc_issued: "",
     remarks: "",
   };
 
   const validationSchema = Yup.object().shape({
-    addmission_number: Yup.string().required("BioData number is required"),
+    admission_number: Yup.string().required("BioData number is required"),
     student_name: Yup.string().required("Student name is required"),
-    dateOfBirth: Yup.date().required("Date of birth is required"),
-    guardian_name: Yup.string().required("Guardian name is required"),
+    date_of_birth: Yup.date().required("Date of birth is required"),
+    gurdian_name: Yup.string().required("Guardian name is required"),
     mother_name: Yup.string().required("Mother name is required"),
     phone: Yup.string(),
     gender: Yup.string().required("Gender is required"),
@@ -51,23 +51,23 @@ const BioData = () => {
     city: Yup.string(),
     country: Yup.string(),
     zip_code: Yup.string(),
-    attended1: Yup.number(),
-    max_meetings1: Yup.number(),
-    attended2: Yup.number(),
-    max_meetings2: Yup.number(),
+    attendance_term_1: Yup.number(),
+    max_meeting_term_1: Yup.number(),
+    attendance_term_2: Yup.number(),
+    max_meeting_term_2: Yup.number(),
     weight: Yup.number(),
     height: Yup.number(),
-    l_vision: Yup.number(),
-    r_vision: Yup.number(),
+    vision_l: Yup.number(),
+    vision_r: Yup.number(),
     admin_category: Yup.string(),
-    reserve_category: Yup.string(),
+    reservation_category: Yup.string(),
     sgc: Yup.string(),
     bpl: Yup.string(),
-    abled: Yup.string(),
+    diffrently_abled: Yup.string(),
     teacher_ward: Yup.string(),
     religion: Yup.string(),
     quota: Yup.string(),
-    addmission_date: Yup.date(),
+    date_of_admission: Yup.date(),
     tc_issued: Yup.string(),
     remarks: Yup.string(),
   });
@@ -76,20 +76,20 @@ const BioData = () => {
     initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
+      console.log(values);
       dispatch(addBioData(values));
-      // try {
-      //   const response = await axios.post(
-      //     "http://localhost:3000/api/v1/students/info",
-      //     values
-      //   );
-      //   console.log(response.data);
-      // } catch (error) {
-      //   console.error("Error submitting form:", error);
-      // }
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/bio-data",
+          values
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     },
   });
 
-  console.log(formik);
   return (
     <section className="py-1 bg-blueGray-50">
       <div className="w-full  px-4 mx-auto mt-6">
@@ -108,28 +108,28 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="addmission_number"
+                      htmlFor="admission_number"
                     >
                       Addmission Number
                     </label>
                     <input
-                      id="addmission_number"
+                      id="admission_number"
                       type="text"
-                      value={formik.values.addmission_number}
+                      value={formik.values.admission_number}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                        formik.touched.addmission_number &&
-                        formik.errors.addmission_number
+                        formik.touched.admission_number &&
+                        formik.errors.admission_number
                           ? "border-red-500"
                           : ""
                       }`}
                     />
                   </div>
-                  {formik.touched.addmission_number &&
-                    formik.errors.addmission_number && (
+                  {formik.touched.admission_number &&
+                    formik.errors.admission_number && (
                       <p className="text-red-500 text-xs mt-1">
-                        {formik.errors.addmission_number}
+                        {formik.errors.admission_number}
                       </p>
                     )}
                 </div>
@@ -166,26 +166,26 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="dateOfBirth"
+                      htmlFor="date_of_birth"
                     >
                       Date Of birth
                     </label>
                     <input
-                      id="dateOfBirth"
+                      id="date_of_birth"
                       type="date"
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
-                      value={formik.values.dateOfBirth}
+                      value={formik.values.date_of_birth}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                        formik.touched.dateOfBirth && formik.errors.dateOfBirth
+                        formik.touched.date_of_birth && formik.errors.date_of_birth
                           ? "border-red-500"
                           : ""
                       }`}
                     />
                   </div>
-                  {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
+                  {formik.touched.date_of_birth && formik.errors.date_of_birth && (
                     <p className="text-red-500 text-xs mt-1">
-                      {formik.errors.dateOfBirth}
+                      {formik.errors.date_of_birth}
                     </p>
                   )}
                 </div>
@@ -193,28 +193,28 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="guardian_name"
+                      htmlFor="gurdian_name"
                     >
                       father name / guardian name
                     </label>
                     <input
                       type="text"
-                      id="guardian_name"
-                      value={formik.values.guardian_name}
+                      id="gurdian_name"
+                      value={formik.values.gurdian_name}
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                        formik.touched.guardian_name &&
-                        formik.errors.guardian_name
+                        formik.touched.gurdian_name &&
+                        formik.errors.gurdian_name
                           ? "border-red-500"
                           : ""
                       }`}
                     />
                   </div>
-                  {formik.touched.guardian_name &&
-                    formik.errors.guardian_name && (
+                  {formik.touched.gurdian_name &&
+                    formik.errors.gurdian_name && (
                       <p className="text-red-500 text-xs mt-1">
-                        {formik.errors.guardian_name}
+                        {formik.errors.gurdian_name}
                       </p>
                     )}
                 </div>
@@ -383,14 +383,14 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="attended1"
+                      htmlFor="attendance_term_1"
                     >
                       ATTENDED
                     </label>
                     <input
-                      id="attended1"
+                      id="attendance_term_1"
                       type="number"
-                      value={formik.values.attended1}
+                      value={formik.values.attendance_term_1}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -400,14 +400,14 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="max_meetings1"
+                      htmlFor="max_meeting_term_1"
                     >
                       MAX. MEETINGS
                     </label>
                     <input
                       type="number"
-                      id="max_meetings1"
-                      value={formik.values.max_meetings1}
+                      id="max_meeting_term_1"
+                      value={formik.values.max_meeting_term_1}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -424,14 +424,14 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="attended2"
+                      htmlFor="attendance_term_2"
                     >
                       ATTENDED
                     </label>
                     <input
-                      id="attended2"
+                      id="attendance_term_2"
                       type="number"
-                      value={formik.values.attended2}
+                      value={formik.values.attendance_term_2}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -441,14 +441,14 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="max_meetings2"
+                      htmlFor="max_meeting_term_2"
                     >
                       MAX. MEETINGS
                     </label>
                     <input
                       type="number"
-                      id="max_meetings2"
-                      value={formik.values.max_meetings2}
+                      id="max_meeting_term_2"
+                      value={formik.values.max_meeting_term_2}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -498,15 +498,15 @@ const BioData = () => {
                 <div className="w-full lg:w-3/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      htmlFor="l_vision"
+                      htmlFor="vision_l"
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     >
                       L Vision
                     </label>
                     <input
                       type="number"
-                      id="l_vision"
-                      value={formik.values.l_vision}
+                      id="vision_l"
+                      value={formik.values.vision_l}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -515,15 +515,15 @@ const BioData = () => {
                 <div className="w-full lg:w-3/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      htmlFor="r_vision"
+                      htmlFor="vision_r"
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     >
                       R Vision
                     </label>
                     <input
                       type="number"
-                      id="r_vision"
-                      value={formik.values.r_vision}
+                      id="vision_r"
+                      value={formik.values.vision_r}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     />
@@ -563,14 +563,14 @@ const BioData = () => {
                 <div className="w-full lg:w-3/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      htmlFor="reserve_category"
+                      htmlFor="reservation_category"
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     >
                       Reserve Category
                     </label>
                     <select
-                      id="reserve_category"
-                      value={formik.values.reserve_category}
+                      id="reservation_category"
+                      value={formik.values.reservation_category}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     >
@@ -627,14 +627,14 @@ const BioData = () => {
                 <div className="w-full lg:w-3/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
-                      htmlFor="abled"
+                      htmlFor="diffrently_abled"
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
                     >
                       DIFFERENTLY ABLED
                     </label>
                     <select
-                      id="abled"
-                      value={formik.values.abled}
+                      id="diffrently_abled"
+                      value={formik.values.diffrently_abled}
                       onChange={formik.handleChange}
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                     >
@@ -718,13 +718,13 @@ const BioData = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="addmission_date"
+                      htmlFor="date_of_admission"
                     >
                       DATE OF ADMISSION
                     </label>
                     <input
-                      id="addmission_date"
-                      value={formik.values.addmission_date}
+                      id="date_of_admission"
+                      value={formik.values.date_of_admission}
                       onChange={formik.handleChange}
                       type="date"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"

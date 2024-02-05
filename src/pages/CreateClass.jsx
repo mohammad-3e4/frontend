@@ -30,15 +30,15 @@ export default function CreateClass() {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       console.log(values);
-      // try {
-      //   const response = await axios.post(
-      //     "http://localhost:3000/api/create-class",
-      //     values
-      //   );
-      //   console.log(response.data);
-      // } catch (error) {
-      //   console.error("Error submitting form:", error);
-      // }
+      try {
+        const response = await axios.post(
+          "http://localhost:8000/api/create-class",
+          values
+        );
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
     },
   });
   return (
