@@ -6,8 +6,7 @@ import { addSubjectInfo } from "../redux/student/studentSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 const Co_Schoolastic = () => {
-  const [maxTwoTerm1, setMaxTwoTerm1] = useState("");
-  const [maxTwoTerm2, setMaxTwoTerm2] = useState("");
+
   const dispacth = useDispatch();
   const biodata = useSelector((state) => state.studentData);
   const initialValues = {
@@ -21,13 +20,14 @@ const Co_Schoolastic = () => {
     multiple_assessment_term1_pt1: "",
     multiple_assessment_term1_pt2: "",
     multiple_assessment_term1_pt3: "",
-    best_of_two_term1: 9.5,
-    weightage_term1: 5.37,
+    best_of_two_term1: 0,
+    weightage_term1: 0,
     portfoilo_term1: "",
     sub_enrich_act_term1: "",
     total_marks_term_1: "",
     final_grade_term_1: "",
     hly_exam_term1: "",
+
     pen_paper_term2_pt1: "",
     pen_paper_term2_pt2: "",
     pen_paper_term2_pt3: "",
@@ -77,7 +77,8 @@ const Co_Schoolastic = () => {
     initialValues,
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      dispacth(addSubjectInfo({ subject: subject, data: values }));
+      console.log(values);
+      // dispacth(addSubjectInfo({ subject: subject, data: values }));
       // try {
       //   const response = await axios.post(
       //     "http://localhost:3000/api/v1/students/info",
@@ -90,6 +91,25 @@ const Co_Schoolastic = () => {
     },
   });
   useEffect(() => {
+    const calculateTotal = () => {
+      const weightageSum1 = Number(formik.values.weightage_term1) || 0;
+      const subEnrichActSum1 = Number(formik.values.sub_enrich_act_term1) || 0;
+      const portfolioSum1 = Number(formik.values.portfoilo_term1) || 0;
+      const hlyExamSum1 = Number(formik.values.hly_exam_term1) || 0;
+  
+      const weightageSum2 = Number(formik.values.weightage_term2) || 0;
+      const subEnrichActSum2 = Number(formik.values.sub_enrich_act_term2) || 0;
+      const portfolioSum2 = Number(formik.values.portfoilo_term2) || 0;
+      const hlyExamSum2 = Number(formik.values.annual_exam) || 0;
+  
+      const totalTerm1 =
+        weightageSum1 + subEnrichActSum1 + portfolioSum1 + hlyExamSum1;
+      const totalTerm2 =
+        weightageSum2 + subEnrichActSum2 + portfolioSum2 + hlyExamSum2;
+  
+      return { totalTerm1, totalTerm2 };
+    };
+  
     const calculateMaxSum = (
       pt1,
       multiple_assessment1,
@@ -99,26 +119,24 @@ const Co_Schoolastic = () => {
       multiple_assessment3
     ) => {
       const parseAndSum = (a, b) => Number(a) + Number(b);
-
+  
       const sum1 = parseAndSum(pt1, multiple_assessment1);
       const sum2 = parseAndSum(pt2, multiple_assessment2);
       const sum3 = parseAndSum(pt3, multiple_assessment3);
-
+  
       console.log(sum1, sum2, sum3);
-
+  
       const maxSum = Math.max(sum1, sum2);
       const maxSum1 = Math.max(maxSum, sum3);
-
+  
       if (sum1 > 0 && sum2 > 0 && sum3 > 0) {
-        const maxSum = Math.max(sum1, sum2);
-        const maxSum1 = Math.max(maxSum, sum3);
         console.log(maxSum, maxSum1);
         return maxSum + maxSum1;
       }
-
+  
       return 0; // Or any default value you want to set
     };
-
+  
     const maxTwoTerm1Value = calculateMaxSum(
       formik.values.pen_paper_term1_pt1,
       formik.values.multiple_assessment_term1_pt1,
@@ -135,10 +153,41 @@ const Co_Schoolastic = () => {
       formik.values.pen_paper_term2_pt3,
       formik.values.multiple_assessment_term2_pt3
     );
+  
+    formik.setFieldValue("best_of_two_term1", maxTwoTerm1Value)
+    formik.setFieldValue("best_of_two_term2", maxTwoTerm2Value)
 
-    setMaxTwoTerm1(maxTwoTerm1Value);
-    setMaxTwoTerm2(maxTwoTerm2Value);
-  }, [formik.values]);
+  
+    const { totalTerm1, totalTerm2 } = calculateTotal();
+  
+    formik.setFieldValue("total_marks_term_1", totalTerm1.toFixed(2));
+    formik.setFieldValue("total_marks_term_2", totalTerm2.toFixed(2));
+    const calculateGrade = (totalMarks) => {
+      if (totalMarks >= 91 && totalMarks <= 100) {
+        return "A1";
+      } else if (totalMarks >= 81 && totalMarks <= 90) {
+        return "A2";
+      } else if (totalMarks >= 71 && totalMarks <= 80) {
+        return "B1";
+      } else if (totalMarks >= 61 && totalMarks <= 70) {
+        return "B2";
+      } else if (totalMarks >= 51 && totalMarks <= 60) {
+        return "C1";
+      } else if (totalMarks >= 41 && totalMarks <= 50) {
+        return "C2";
+      } else if (totalMarks >= 33 && totalMarks <= 40) {
+        return "D";
+      } else {
+        return "E";
+      }
+    };
+    // Calculate and set final grades
+    const gradeTerm1 = calculateGrade(totalTerm1);
+    const gradeTerm2 = calculateGrade(totalTerm2);
+  
+    formik.setFieldValue("final_grade_term_1", gradeTerm1);
+    formik.setFieldValue("final_grade_term_2", gradeTerm2);
+  }, [formik.values, formik.setFieldValue]);
 
   return (
     <section className="py-1 bg-blueGray-50">
@@ -269,10 +318,9 @@ const Co_Schoolastic = () => {
                     <input
                       id="adm_no"
                       type="text"
-                      defaultValue={
-                        biodata.bioData.adm_no || formik.values.adm_no
-                      }
-                      disabled={biodata.bioData.adm_no}
+                      value={formik.values.adm_no}
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
                         formik.touched.adm_no && formik.errors.adm_no
                           ? "border-red-500"
@@ -325,23 +373,22 @@ const Co_Schoolastic = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="total_marks"
+                      htmlFor="total_marks_term_1"
                     >
-                      TOTAL MARKS 
+                      TOTAL MARKS
                     </label>
                     <input
-                      id="pen_paper_term1_pt1"
+                      id="total_marks_term_1"
                       type="number"
+                      disabled
                       value={
-                        formik.values.pen_paper_term1_pt1 >= 5
-                          ? 5
-                          : formik.values.pen_paper_term1_pt1
+                        formik.values.total_marks_term_1 
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                        formik.touched.pen_paper_term1_pt1 &&
-                        formik.errors.pen_paper_term1_pt1
+                        formik.touched.total_marks_term_1 &&
+                        formik.errors.total_marks_term_1
                           ? "border-red-500"
                           : ""
                       }`}
@@ -352,23 +399,22 @@ const Co_Schoolastic = () => {
                   <div className="relative w-full mb-3">
                     <label
                       className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
-                      htmlFor="pen_paper_term1_pt1"
+                      htmlFor="final_grade_term_1"
                     >
-                      Pen & Paper
+                      Grade
                     </label>
                     <input
-                      id="pen_paper_term1_pt1"
-                      type="number"
+                      id="final_grade_term_1"
+                      type="text"
+                      disabled
                       value={
-                        formik.values.pen_paper_term1_pt1 >= 5
-                          ? 5
-                          : formik.values.pen_paper_term1_pt1
+                        formik.values.final_grade_term_1 
                       }
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
-                        formik.touched.pen_paper_term1_pt1 &&
-                        formik.errors.pen_paper_term1_pt1
+                        formik.touched.final_grade_term_1 &&
+                        formik.errors.final_grade_term_1
                           ? "border-red-500"
                           : ""
                       }`}
@@ -619,9 +665,8 @@ const Co_Schoolastic = () => {
                     <input
                       id="best_of_two_term1"
                       type="number"
-                      value={maxTwoTerm1}
+                      value={formik.values.best_of_two_term1}
                       disabled
-                      onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
                         formik.touched.best_of_two_term1 &&
@@ -740,6 +785,61 @@ const Co_Schoolastic = () => {
               <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                 TERM:2
               </h6>
+              <div className="flex flex-wrap">
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="total_marks_term_2"
+                    >
+                      TOTAL MARKS
+                    </label>
+                    <input
+                      id="total_marks_term_2"
+                      type="number"
+                      disabled
+                      value={
+                        formik.values.total_marks_term_2 
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
+                        formik.touched.total_marks_term_2 &&
+                        formik.errors.total_marks_term_2
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+                <div className="w-full lg:w-6/12 px-4">
+                  <div className="relative w-full mb-3">
+                    <label
+                      className="block uppercase text-blueGray-600 text-xs font-bold mb-2"
+                      htmlFor="final_grade_term_2"
+                    >
+                      Grade
+                    </label>
+                    <input
+                      id="final_grade_term_2"
+                      type="text"
+                      disabled
+                      value={
+                        formik.values.final_grade_term_2 
+                      }
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
+                        formik.touched.final_grade_term_2 &&
+                        formik.errors.final_grade_term_2
+                          ? "border-red-500"
+                          : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+              <hr className="my-6 border-b-1 border-blueGray-300" />
               <div className="flex flex-wrap">
                 <div className="w-full lg:w-4/12 px-4">
                   <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold text-center uppercase">
@@ -982,9 +1082,8 @@ const Co_Schoolastic = () => {
                     <input
                       id="best_of_two_term2"
                       type="text"
-                      value={maxTwoTerm2}
+                      value={formik.values.best_of_two_term2}
                       disabled
-                      onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       className={`border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150 ${
                         formik.touched.best_of_two_term2 &&
